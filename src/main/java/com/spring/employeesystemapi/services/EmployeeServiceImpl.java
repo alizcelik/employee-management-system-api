@@ -6,6 +6,8 @@ import com.spring.employeesystemapi.repository.EmployeeRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
@@ -23,5 +25,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository.save(employeeEntity);
 
         return employee;
+    }
+
+    @Override
+    public List<Employee> getAllEmployees() {
+        List<EmployeeEntity> employeeEntities = employeeRepository.findAll();
+
+        return employeeEntities
+                .stream()
+                .map(employeeEntity -> new Employee(employeeEntity.getId(),
+                        employeeEntity.getFirstName(),
+                        employeeEntity.getLastName(),
+                        employeeEntity.getEmailId()))
+                .toList();
     }
 }
